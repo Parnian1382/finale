@@ -220,3 +220,87 @@ void DIV(int rt, int rs)
     zero_flag(s[rt]);
     sign_flag(s[rt]);
 }
+/**
+ * MULL
+ * @brief multiply two registers: 4 more bits in rt &  4 less bits in rs
+ * @param int rs & rt
+ * @return void
+ **/
+void MULL(int rt, int rs)
+{
+    int multi;
+    multi = s[rt] * s[rs];
+    s[rt] = multi / 16;
+    s[rs] = multi % 16;
+    parity_flag(multi);
+    zero_flag(multi);
+    sign_flag(multi);
+    overflow_flag_mull(s[rt], s[rs], multi);
+}
+/**
+ * ADDI
+ * @brief adding a registers and a number
+ * @param int rt, rs, Imm
+ * @return void
+ **/
+void ADDI(int rt, int rs, int Imm)
+{
+    s[rt] = s[rs] + Imm;
+    parity_flag(s[rt]);
+    zero_flag(s[rt]);
+    sign_flag(s[rt]);
+    overflow_flag_add(s[rt], s[rs], Imm);
+}
+/**
+ * SUBI
+ * @brief subbing a registers and a number
+ * @param int rt, rs & Imm
+ * @return void
+ **/
+void SUBI(int rt, int rs, int Imm)
+{
+    s[rt] = s[rs] - Imm;
+    parity_flag(s[rt]);
+    zero_flag(s[rt]);
+    sign_flag(s[rt]);
+    overflow_flag_sub(s[rt], s[rs], Imm);
+}
+/**
+ * ANDI
+ * @brief  AND a register with a number
+ * @param int rt, rs & Imm
+ * @return void
+ **/
+void ANDI(int rt, int rs, int Imm)
+{
+    s[rt] = s[rs] & Imm;
+    parity_flag(s[rt]);
+    zero_flag(s[rt]);
+    sign_flag(s[rt]);
+}
+/**
+ * ORI
+ * @brief OR a register with a number
+ * @param int rt, rs & Imm
+ * @return void
+ **/
+void ORI(int rt, int rs, int Imm)
+{
+    s[rt] = s[rs] | Imm;
+    parity_flag(s[rt]);
+    zero_flag(s[rt]);
+    sign_flag(s[rt]);
+}
+/**
+ * XORI
+ * @brief XOR a register with a number
+ * @param int rt, rs & Imm
+ * @return void
+ **/
+void XORI(int rt, int rs, int Imm)
+{
+    s[rt] = s[rs] ^ Imm;
+    parity_flag(s[rt]);
+    zero_flag(s[rt]);
+    sign_flag(s[rt]);
+}
