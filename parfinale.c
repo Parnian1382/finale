@@ -304,3 +304,67 @@ void XORI(int rt, int rs, int Imm)
     zero_flag(s[rt]);
     sign_flag(s[rt]);
 }
+/**
+ * MOV
+ * @brief put a number in a register
+ * @param[in] int (integer number rt & Imm)
+ * @return void
+ **/
+void MOV(int rt, int Imm)
+{
+    s[rt] = Imm;
+}
+/**
+ * SWP
+ * @brief swap two registers
+ * @param int rt & rs
+ * @return void
+ **/
+void SWP(int rt, int rs)
+{
+    int help1, help2;
+    help1 = s[rt];
+    help2 = s[rs];
+    MOV(rt, help2);
+    MOV(rs, help1);
+}
+/**
+ * DUMP_REGS
+ * @brief print all register's value
+ * @param void
+ * @return void
+ **/
+void DUMP_REGS()
+{
+    for (int i = 0; i < 32; i++)
+    {
+        printf("%d  ", s[i]);
+    }
+    printf("\n");
+    for (int i = 0; i < 8; i++)
+    {
+        printf("%d  ", status[i]);
+    }
+    printf("\n");
+}
+/**
+ * DUMP_REGS_F
+ * @brief save the value of all registers in regs.tx
+ * @param void
+ * @return void
+ **/
+void DUMP_REGS_F()
+{
+    FILE *file;
+    file = fopen("regs.txt", "w");
+    for (int i = 0; i < 32; i++)
+    {
+        fprintf(file, "%d ", s[i]);
+    }
+    fprintf(file, "\n");
+    for (int i = 0; i < 8; i++)
+    {
+        fprintf(file, "%d ", status[i]);
+    }
+    fclose(file);
+}
