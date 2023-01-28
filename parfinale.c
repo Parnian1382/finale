@@ -436,3 +436,31 @@ int error(int a, int b, int c, int line)
     else
         return 1;
 }
+/**
+ * main
+ * \section main
+ * @brief run all the code lines that is written in our file
+ * @param int argc, *argv[]
+ * @return 0
+ **/
+int main(int argc, char *argv[])
+{
+    int i = 0, rs = 0, rd = 0, rt = 0, imm = 0;
+    int all_lines = 0;
+    int current_line = 0;
+    int count_jmp_up = 1;
+    char content[1000], finish[10], chr;
+    FILE *fptr;
+    if (argc < 2)
+    {
+        fptr = fopen("y.txt", "r");
+    }
+    else
+    {
+        fptr = fopen(argv[1], "r");
+    }
+    while (fgets(content, 1000, fptr))
+    {
+        all_lines++;
+    }
+    rewind(fptr);
