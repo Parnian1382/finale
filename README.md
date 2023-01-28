@@ -1,3 +1,3 @@
 # fundamental programming final project
-parnian bahrami
-github link:
+parnian bahrami\n
+github link:https://github.com/Parnian1382/finale.git
