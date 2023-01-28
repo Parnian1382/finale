@@ -464,3 +464,212 @@ int main(int argc, char *argv[])
         all_lines++;
     }
     rewind(fptr);
+    while (fgets(content, 1000, fptr))
+    {
+        rs = 0, rd = 0, rt = 0, imm = 0;
+        current_line++;
+        for (int j = 0; j < sizeof(content); j++)
+        {
+            content[j] = toupper(content[j]);
+        }
+        i = 0;
+        char command[150] = {'\0'};
+
+        while (content[i] != ' ' && content[i] != '\n' && content[i] != '/')
+        {
+            command[i] = content[i];
+            i++;
+        }
+        if (strcmp(command, "EXIT") == 0)
+        {
+            exit(0);
+        }
+        else if (strcmp(command, "ADD") == 0)
+        {
+            sscanf(content, "ADD S%d, S%d, S%d", &rd, &rs, &rt);
+            if (error(rd, rs, rt, current_line) == 2)
+                ADD(rd, rs, rt);
+        }
+        else if (strcmp(command, "SUB") == 0)
+        {
+            sscanf(content, "SUB S%d, S%d, S%d", &rd, &rs, &rt);
+            if (error(rt, rs, rd, current_line) == 2)
+                SUB(rd, rs, rt);
+        }
+        else if (strcmp(command, "AND") == 0)
+        {
+            sscanf(content, "AND S%d, S%d, S%d", &rd, &rs, &rt);
+            if (error(rt, rs, rd, current_line) == 2)
+                AND(rd, rs, rt);
+        }
+        else if (strcmp(command, "XOR") == 0)
+        {
+            sscanf(content, "XOR S%d, S%d, S%d", &rd, &rs, &rt);
+            if (error(rt, rs, rd, current_line) == 2)
+                XOR(rd, rs, rt);
+        }
+        else if (strcmp(command, "OR") == 0)
+        {
+            sscanf(content, "OR S%d, S%d, S%d", &rd, &rs, &rt);
+            if (error(rt, rs, rd, current_line) == 2)
+                OR(rd, rs, rt);
+        }
+        else if (strcmp(command, "ADDI") == 0)
+        {
+            sscanf(content, "ADDI S%d, S%d, %d", &rd, &rs, &imm);
+            if (error(rt, rs, rd, current_line) == 2)
+                ADDI(rd, rs, imm);
+        }
+        else if (strcmp(command, "SUBI") == 0)
+        {
+            sscanf(content, "SUBI S%d, S%d, %d", &rd, &rs, &imm);
+            if (error(rt, rs, rd, current_line) == 2)
+                SUBI(rd, rs, imm);
+        }
+        else if (strcmp(command, "ANDI") == 0)
+        {
+            sscanf(content, "ANDI S%d, S%d, %d", &rd, &rs, &imm);
+            if (error(rt, rs, rd, current_line) == 2)
+                ANDI(rd, rs, imm);
+        }
+        else if (strcmp(command, "XORI") == 0)
+        {
+            sscanf(content, "XORI S%d, S%d, %d", &rd, &rs, &imm);
+            if (error(rt, rs, rd, current_line) == 2)
+                XORI(rd, rs, imm);
+        }
+        else if (strcmp(command, "ORI") == 0)
+        {
+            sscanf(content, "ORI S%d, S%d, %d", &rd, &rs, &imm);
+            if (error(rt, rs, rd, current_line) == 2)
+                ORI(rd, rs, imm);
+        }
+        else if (strcmp(command, "MOV") == 0)
+        {
+            if (content[8] == 'S' || content[9] == 'S')
+            {
+
+                sscanf(content, "MOV S%d, S%d", &imm, &rs);
+                if (error(rt, rs, rd, current_line) == 2)
+                    MOV(imm, s[rs]);
+            }
+            else
+            {
+                sscanf(content, "MOV S%d, %d", &rt, &imm);
+                if (error(rt, rs, rd, current_line) == 2)
+                    MOV(rt, imm);
+            }
+        }
+        else if (strcmp(command, "SWP") == 0)
+        {
+            sscanf(content, "SWP S%d, S%d", &rt, &rs);
+            if (error(rt, rs, rd, current_line) == 2)
+                SWP(rt, rs);
+        }
+        else if (strcmp(command, "DUMP_REGS") == 0)
+        {
+            DUMP_REGS();
+        }
+        else if (strcmp(command, "DUMP_REGS_F") == 0)
+        {
+            DUMP_REGS_F();
+        }
+        else if (strcmp(command, "INPUT") == 0)
+        {
+            INPUT();
+        }
+        else if (strcmp(command, "OUTPUT") == 0)
+        {
+            OUTPUT();
+        }
+        else if (strcmp(command, "MULL") == 0)
+        {
+            sscanf(content, "MULL S%d, S%d", &rt, &rd);
+            if (error(rt, rs, rd, current_line) == 2)
+                MULL(rt, rd);
+        }
+        else if (strcmp(command, "DIV") == 0)
+        {
+            sscanf(content, "DIV S%d, S%d", &rt, &rs);
+            if (error(rt, rs, rd, current_line) == 2)
+                DIV(rt, rs);
+        }
+        else if (strcmp(command, "PUSH") == 0)
+        {
+            sscanf(content, "PUSH S%d", &rt);
+            if (error(rt, rs, rd, current_line) == 2)
+                PUSH(rt);
+        }
+        else if (strcmp(command, "PUP") == 0)
+        {
+            sscanf(content, "PUP S%d", &rt);
+            if (error(rt, rs, rd, current_line) == 2)
+                PUP(rt);
+        }
+        else if (strcmp(command, "JMP") == 0)
+        {
+            int lines_jmp = 1;
+            sscanf(content, "JMP %d", &imm);
+            if (imm > 0 && imm < all_lines)
+            {
+                if (count_jmp_up > 3)
+                {
+                    printf("\n\033[31mINFINIT LOOP! SKIPPED AFTER 3 TIMES.(line %d)\n", current_line);
+                    continue;
+                }
+                if (imm < 1)
+                {
+                    printf("\n\033[31mTHE NUMBER OF LINES HAS TO BE POSITIVE!(line %d)\n", current_line);
+                }
+                else if (imm > all_lines)
+                {
+                    printf("\n\033[31mTHERE ARE ONLY '%d' LINES, YOU CAN'T JUMP TO THE LINE '%d'!\n", all_lines, imm);
+                }
+                else
+                {
+                    fseek(fptr, lines_jmp, SEEK_SET);
+                    while (lines_jmp < imm)
+                    {
+                        char chars;
+                        chars = fgetc(fptr);
+                        if (chars == '\n')
+                        {
+                            lines_jmp++;
+                        }
+                    }
+                }
+                count_jmp_up++;
+                current_line = lines_jmp - 1;
+            }
+            else
+            {
+                if (imm < 0)
+                {
+                    printf("line%d: negative line number error in jump\n", current_line);
+                }
+                if (imm > all_lines)
+                {
+                    printf("line%d: not enough lines to jump\n", current_line);
+                }
+            }
+        }
+        else if (strcmp(command, "SKIE") == 0)
+        {
+            sscanf(content, "SKIE S%d, S%d", &rt, &rs);
+            if (error(rt, rs, rd, current_line) == 2)
+            {
+                if (SKIE(rt, rs) == 0)
+                {
+                    fgets(content, 1000, fptr);
+                }
+            }
+            current_line++;
+        }
+        else
+        {
+            WRONG_COMMAND(current_line);
+        }
+    }
+    fclose(fptr);
+    return 0;
+}
