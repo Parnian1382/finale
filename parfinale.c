@@ -368,3 +368,71 @@ void DUMP_REGS_F()
     }
     fclose(file);
 }
+/**
+ * INPUT
+ * @brief getting register[0] value
+ * @param void
+ * @return void
+ **/
+void INPUT()
+{
+    printf("please enter your input:");
+    scanf("%d", &s[0]);
+}
+/**
+ * OUTPUT
+ * @brief print register[0] value
+ * @param void
+ * @return void
+ **/
+void OUTPUT()
+{
+    printf("\n%d", s[0]);
+}
+/**
+ * WRONG_COMMAND
+ * @brief checking the errors of commands
+ * @param int line
+ * @return void
+ **/
+void WRONG_COMMAND(int line)
+{
+    printf("command %d not available!\n", line);
+}
+/**
+ * SKIE
+ * @brief jumps from the next command if s[a]=s[b]
+ * @param int (a, b)
+ * @return 0
+ **/
+int SKIE(int a, int b)
+{
+    if (s[a] == s[b])
+    {
+        return 0;
+    }
+}
+/**
+ * Error
+ * @brief checking the errors for negative index and more than 31 index
+ * @param int (a, b, c, z)
+ * @return 1 or 2
+ **/
+int error(int a, int b, int c, int line)
+{
+    int f = 0;
+    if (a < 0 || b < 0 || c < 0)
+    {
+        printf("negative index error in line %d \n", line);
+        f = 10;
+    }
+    if (a > 31 || b > 31 || c > 31)
+    {
+        printf("value index error in line %d \n", line);
+        f = 10;
+    }
+    if (f != 10)
+        return 2;
+    else
+        return 1;
+}
